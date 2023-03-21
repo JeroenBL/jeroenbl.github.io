@@ -60,11 +60,9 @@ Because in many cases on _Windows PowerShell_ the `$_.ErrorDetails` object will 
 
 ## Best practices
 
-### PowerShell Core
+So, lets find out how this works in a real life scenario.
 
-When working with _PowerShell Core_, it's generally a good practice to use the `$_.ErrorDetails` object to handle errors returned from an API.
-
-#### Example
+Consider this code:
 
 {% highlight powershell %}
 try {
@@ -86,7 +84,7 @@ try {
 }
 {% endhighlight %}
 
-In the code block above, executes the following steps:
+In this code block, we will execute the following steps:
 
 1. Define a hashtable called `splatParams`. The keys of the hash table represent the properties of the `Invoke-RestMethod` cmdlet.
 
@@ -96,7 +94,9 @@ In the code block above, executes the following steps:
 
 4. Grab the error response from `$_.ErrorDetails.Message`, convert it to an object, and obtain the `Error.Message` and write that to the __verbose__ stream.
 
-Let see it in action:
+### PowerShell Core
+
+When working with _PowerShell Core_, it's generally a good practice to use the `$_.ErrorDetails` object to handle errors returned from an API.
 
 ![PScoreExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/PSCoreExample.gif)
 
@@ -108,32 +108,6 @@ As you can see, we have an error stating that the resource with name `12345` doe
 
 In many cases, the `$_ErrorDetails` object may be empty. So when working with _Windows PowerShell 5.1_, it's generally a good practice to use the [error response stream](#responsestream-code-example) to handle errors returned from an API. By using the error response stream, you can ensure that you have access to the full range of error information returned by the API.
 
-#### Example
-
-{% highlight powershell %}
-try {
-    $splatParams = @{
-        Uri     = "https://graph.microsoft.com/v1.0/users/12345"
-        Method  = 'GET'
-        Verbose = $false
-        Headers = @{
-            Authorization  = "Bearer $accessToken"
-            Accept         = 'application/json'
-            'Content-Type' = 'application/json'
-        }
-    }
-    Invoke-RestMethod @splatParams
-} catch {
-    Write-Verbose "PowerShell version: $($PSVersionTable.PSVersion)"
-    Write-Verbose "Exception of type: $($_.Exception.GetType())"
-    Write-Verbose ([System.IO.StreamReader]::new($_.Exception.Response.GetResponseStream()).ReadToEnd() | ConvertFrom-Json).Error.Message
-}
-{% endhighlight %}
-
-In the code block above, we retrieve the error response using the `[System.IO.StreamReader]::new($_.Exception.Response.GetResponseStream()`, convert it to an object, and obtain the `Error.Message` and write that to the __verbose__ stream.
-
-Let see it in action:
-
 ![WinPSExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/WinPSExample.gif)
 
 As you can see, we have an error stating that the resource with name `12345` does not exists. Which is exactly what we want to see.
@@ -141,6 +115,8 @@ As you can see, we have an error stating that the resource with name `12345` doe
 ![WinPSResponseExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/WinPSResponseExample.png)
 
 ## Summary
+
+We have learned that, the best way to handle errors returned by an API will depend on which PowerShell version you are using.
 
 | PowerShell version | Best Practice | Exception type |
 | --- | --- | --- |
