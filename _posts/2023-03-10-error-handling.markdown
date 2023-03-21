@@ -98,11 +98,11 @@ In the code block above, executes the following steps:
 
 Let see it in action:
 
-![PScoreExample](2023-03-10-error-handling/PSCoreExample.gif)
+![PScoreExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/PSCoreExample.gif)
 
 As you can see, we have an error stating that the resource with name `12345` does not exists. Which is exactly what we want to see.
 
-![PScoreExample](2023-03-10-error-handling/PSCoreResponseExample.png)
+![PScoreResponseExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/PSCoreResponseExample.png)
 
 ### Windows PowerShell
 
@@ -134,11 +134,11 @@ In the code block above, we retrieve the error response using the `[System.IO.St
 
 Let see it in action:
 
-![WinPSExample](2023-03-10-error-handling/WinPSExample.gif)
+![WinPSExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/WinPSExample.gif)
 
 As you can see, we have an error stating that the resource with name `12345` does not exists. Which is exactly what we want to see.
 
-![WinPSExample](2023-03-10-error-handling/WinPSResponseExample.png)
+![WinPSResponseExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/main/_posts/2023-03-10-error-handling/WinPSResponseExample.png)
 
 ## Summary
 
