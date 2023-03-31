@@ -1,0 +1,71 @@
+---
+layout: post
+title:  "Error handling"
+date:   2023-04-10 21:48:25 +0100
+categories: powershell
+---
+
+## Introduction
+
+One of the most common tasks is accessing and manipulating data from APIs. In this blog post, we'll explore how PowerShell can interact with two types of APIs: REST and GraphQL.
+
+## Content
+
+- [Introduction](#introduction)
+- [Content](#content)
+- [HTML](#html)
+- [Authentication](#authentication)
+  - [oAuth](#oauth)
+  - [Session / Cookie](#session--cookie)
+  - [Basic](#basic)
+- [REST](#rest)
+  - [GET](#get)
+  - [POST](#post)
+  - [PATCH](#patch)
+    - [JSON PATCH](#json-patch)
+  - [PUT](#put)
+  - [DELETE](#delete)
+- [GraphQL](#graphql)
+  - [POST](#post-1)
+- [SOAP](#soap)
+
+## HTML
+
+Both REST and GraphQL rely on the HTTP protocol for communication between the client and server. This allows for a standardized way of exchanging information and makes them well-suited for building web applications. The difference with a HTTP request by the browser is that; upon accessing a webpage, the server sends a response containing content, typically HTML, that is rendered by the browser. In contrast, an API response typically contains data in JSON format. Despite the difference in content type, the fundamental mechanics of both responses are identical.
+
+> :bulb:<br>
+Always begin making calls in Postman or a similar tool. This way, you can find out what an API returns when a call is successful or what kind of error it returns.
+
+## Authentication
+
+### oAuth
+
+### Session / Cookie
+
+### Basic
+
+## REST
+
+REST (Representational State Transfer) is a popular architectural style for building web services. REST APIs expose resources as URLs that can be accessed using HTTP methods.
+
+The key principle of REST is the use of HTTP (Hypertext Transfer Protocol) as the application protocol. REST APIs expose resources as URLs that can be accessed using HTTP methods, such as GET, POST, PUT, and DELETE. Each resource has a unique URL and can be identified by a URI (Uniform Resource Identifier).
+
+### GET
+
+### POST
+
+### PATCH
+
+#### JSON PATCH
+
+### PUT
+
+### DELETE
+
+## GraphQL
+
+GraphQL is a query language for APIs that was developed by Facebook. GraphQL APIs allow clients to specify the exact data they need and receive only that data in response.
+
+### POST
+
+## SOAP
