@@ -15,9 +15,10 @@ One of the most common tasks is accessing and manipulating data from APIs. In th
 - [Content](#content)
 - [HTML](#html)
 - [Authentication](#authentication)
-  - [oAuth](#oauth)
+  - [oAuth / Token](#oauth--token)
   - [Session / Cookie](#session--cookie)
   - [Basic](#basic)
+- [_Invoke-RestMethod_ vs _Invoke-WebRequest_](#invoke-restmethod-vs-invoke-webrequest)
 - [REST](#rest)
   - [GET](#get)
   - [POST](#post)
@@ -27,28 +28,146 @@ One of the most common tasks is accessing and manipulating data from APIs. In th
   - [DELETE](#delete)
 - [GraphQL](#graphql)
   - [POST](#post-1)
-- [SOAP](#soap)
+    - [Example to retrieve data](#example-to-retrieve-data)
+    - [Example to create data](#example-to-create-data)
 
 ## HTML
 
 Both REST and GraphQL rely on the HTTP protocol for communication between the client and server. This allows for a standardized way of exchanging information and makes them well-suited for building web applications. The difference with a HTTP request by the browser is that; upon accessing a webpage, the server sends a response containing content, typically HTML, that is rendered by the browser. In contrast, an API response typically contains data in JSON format. Despite the difference in content type, the fundamental mechanics of both responses are identical.
 
 > :bulb:<br>
-Always begin making calls in Postman or a similar tool. This way, you can find out what an API returns when a call is successful or what kind of error it returns.
+Always begin making calls in Postman or a similar tool. This way, you can find out what an API returns when a call is successful or, in case the API call fails, what kind of error will be returned.
 
 ## Authentication
 
-### oAuth
+### oAuth / Token
+
+OAuth token authentication can be used in PowerShell to authenticate API requests. To authenticate with OAuth, you need to obtain an access token from the API's authorization server and include this token in your requests.
+
+Here are the basic steps for using OAuth token authentication in PowerShell:
+
+1. Obtain an access token from the API's authorization server. This typically involves making a request to the authorization server's token endpoint with your client ID and secret, as well as any other required parameters.
+2. Store the access token in a secure manner. This can be done by storing it in an environment variable or using PowerShell's built-in secure string functionality.
+3. Include the access token in your API requests by adding an authorization header with the value _"Bearer {access_token}"_.
+
+Here's an example of how to authenticate using this method:
+
+```powershell
+{% highlight powershell %}
+# Set up the OAuth token request
+$body = @{
+  grant_type    = 'client_credentials'
+  client_id     = 'your_client_id'
+  client_secret = 'your_client_secret'
+}
+$accessToken = Invoke-RestMethod -Uri 'https://api.example.com/oauth/token' -Method POST -Body $body
+
+# Make an API request using the access token
+$headers = @{
+  Authorization = "Bearer $accessToken"
+}
+Invoke-RestMethod -Uri 'https://api.example.com/api/resource' -Headers $headers
+{% endhighlight %}
+```
 
 ### Session / Cookie
 
+Session or cookie-based authentication is another method of authentication commonly used by web applications. In this method, the server creates a session for the client after successful authentication and stores a unique identifier for the session in a cookie on the client's browser. This cookie is then sent back to the server with subsequent requests to identify the client's session and allow them access to protected resources.
+
+In PowerShell, you can use the Invoke-WebRequest cmdlet to authenticate using session or cookie-based authentication. 
+
+Here's an example of how to authenticate using this method:
+
+```powershell
+{% highlight powershell %}
+# Send a login request to the server
+$loginForm = @{
+    username = 'your_username'
+    password = 'your_password'
+}
+$response = Invoke-RestMethod -Uri 'https://example.com//api/login' -Method POST -Body $loginForm
+
+# Extract the session cookie from the response
+$sessionCookie = $response.Cookies.GetCookies($loginUrl) | Where-Object {$_.Name -eq "session_id"}
+
+# Use the session cookie to make authenticated requests
+$authenticatedUrl = "https://example.com/api/resource"
+$authenticatedHeaders = @{
+    Cookie = "session_id = $($sessionCookie.Value)"
+}
+$authenticatedResponse = Invoke-RestMethod -Uri $authenticatedUrl -Headers $authenticatedHeaders
+
+# Process the authenticated response
+$authenticatedResponse.Content
+{% endhighlight %}
+```
+
+In this example, we first send a login request to the server with the user's credentials. We then extract the session cookie from the server's response using the `GetCookies()` method. We can then use this session cookie to make authenticated requests to protected resources on the server. We pass the session cookie as a header in the request using the cookie parameter.
+
+Another way of doing this, is by using a websession.
+
+```powershell
+{% highlight powershell %}
+# Create a new web session object
+$session = [Microsoft.PowerShell.Commands.WebRequestSession]::new()
+
+# Send a login request to the server
+$loginForm = @{
+    username = 'your_username'
+    password = 'your_password'
+}
+Invoke-WebRequest -Uri 'https://example.com//api/login' -Method POST -Body $loginForm -WebSession $session
+
+# Use the web session to make authenticated requests
+$authenticatedUrl = "https://example.com/api/resource"
+$authenticatedResponse = Invoke-WebRequest -Uri $authenticatedUrl -WebSession $session
+
+# Process the authenticated response
+$authenticatedResponse.Content
+{% highlight powershell %}
+```
+
+In this example, we first create a new web session object using `[Microsoft.PowerShell.Commands.WebRequestSession]::new()` method. We then send a login request to the server and pass the web session object using the `-WebSession` parameter. The web session object stores the session cookie returned by the server, so subsequent requests using the same web session object will include the session cookie and be authenticated. We use the web session object to make authenticated requests to protected resources on the server using the `-WebSession` parameter.
+
 ### Basic
+
+The basic authentication method requires a _Username_ and _Password_ or, in some cases, a _clientId_ and _clientSecret_ for authentication. This method is called 'basic' because it is the simplest form of authentication and is built into the HTTP protocol.
+
+To construct the basic authentication header, the username and password are combined into a string in the following format: _{username}:{password}_. This string is then converted to a base64 encoded string, which is used to create the authentication header.
+
+Here's an example of how to authenticate using this method:
+
+```powershell
+{% highlight powershell %}
+# Basic authentication (Windows PowerShell)
+$credentials = 'UserName:Password'
+$base64Credentials = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($credentials))
+
+$headers = @{Authorization = "basic $base64Credentials"}
+Invoke-RestMethod -Uri 'https://api.example.com/api/resource' -Headers $headers
+
+# Basic authentication (PowerShell Core)
+$password = ConvertTo-SecureString 'Password' -AsPlainText -Force
+$credentials = [pscredential]::new('UserName', $password)
+Invoke-RestMethod -Uri 'https://api.example.com/api/resource' -Authentication Basic -Credential $credentials -AllowUnencryptedAuthentication
+{% endhighlight %}
+``` 
+
+## _Invoke-RestMethod_ vs _Invoke-WebRequest_
+
+When deciding between Invoke-RestMethod and Invoke-WebRequest, keep in mind that they both use the same .NET class within a specific PowerShell version, resulting in no difference in performance. Therefore, choosing the right cmdlet depends on the specific requirements you have. For instance, if you require header information and are working with Windows PowerShell, you should use `Invoke-WebRequest`.
+
+|  | _Windows PowerShell_ | _PowerShell Core_ |
+| --- | --- | --- |
+| `Invoke-WebRequest` | - Full response object including headers.<br> - Requires enabling of TLS 1.2.<br> - Uses `System.Net.WebRequest`.<br> - Response content must be converted to an object.<br> - Error of type `System.Net.WebException`.<br> - Empty `$_.ErrorDetails_` object because of a bug.| - Full response object including headers.<br> - Default support for TLS 1.2.<br> - Uses `System.Net.HttpClient`.<br> - Response content must be converted to an object.<br> - Error of type `Microsoft.PowerShell.Commands.HttpResponseException`.<br> - Error always in `$_.ErrorDetails_`.|
+| `Invoke-RestMethod` | - Response content only.<br> - Requires enabling of TLS 1.2.<br> - Uses `System.Net.WebRequest`.<br> - Converts the response content to an object.<br> - Response headers not available.<br> - Error of type `System.Net.WebException`.<br> - Empty `$_.ErrorDetails_` object because of a bug. | - Response content only.<br> - Default support for TLS 1.2.<br> - Uses `System.Net.HttpClient`.<br> - Response headers available by using the `-ResponseHeadersVariable` parameter. <br> - Error of type `Microsoft.PowerShell.Commands.HttpResponseException`.<br> - Error always in `$_.ErrorDetails_`.|
 
 ## REST
 
 REST (Representational State Transfer) is a popular architectural style for building web services. REST APIs expose resources as URLs that can be accessed using HTTP methods.
 
 The key principle of REST is the use of HTTP (Hypertext Transfer Protocol) as the application protocol. REST APIs expose resources as URLs that can be accessed using HTTP methods, such as GET, POST, PUT, and DELETE. Each resource has a unique URL and can be identified by a URI (Uniform Resource Identifier).
+
 
 ### GET
 
@@ -58,14 +177,86 @@ The key principle of REST is the use of HTTP (Hypertext Transfer Protocol) as th
 
 #### JSON PATCH
 
+```powershell
+{% highlight powershell %}
+# Define the JSON patch operations
+$body = @(
+    @{ 'op' = 'replace'; 'path' = '/age'; 'value' = 35 }
+    @{ 'op' = 'remove'; 'path' = '/address/state' }
+) | ConvertTo-Json
+
+# Send the PATCH request to the API endpoint
+Invoke-RestMethod -Method PATCH -Uri 'https://example.com/api/resource/123' -Body $body -ContentType 'application/json'
+{% endhighlight %}
+```
+
+In this example, the JSON Patch replaces the _age_ property with a new value of _35_ and removes the _state_ property from the _address_  object.
+
 ### PUT
 
 ### DELETE
 
 ## GraphQL
 
-GraphQL is a query language for APIs that was developed by Facebook. GraphQL APIs allow clients to specify the exact data they need and receive only that data in response.
+GraphQL is an increasingly popular alternative to RESTful APIs, as it allows for more efficient and flexible data fetching. With GraphQL, you can specify exactly what data you need in a single request, rather than making multiple requests to a RESTful API for different pieces of data.
 
 ### POST
 
-## SOAP
+#### Example to retrieve data
+```powershell
+{% highlight powershell %}
+# Set the GraphQL query
+$query = @"
+query {
+  user(id: "123") {
+    name
+    email
+    posts {
+      title
+      content
+    }
+  }
+}
+"@
+ 
+# Create a body object with the GraphQL query
+$body = @{
+    query = $query
+} | ConvertTo-Json
+ 
+# Make the API call
+Invoke-RestMethod -Uri 'https://api.example.com/graphql' -Method POST -Body $body
+{% endhighlight %}
+```
+
+In this example, we set the query. The query specfies that, in this case, we want to retrieve the specified parameters for user _123_. We create a body object containing the GraphQL query, and convert it to JSON. Finally, we make the API call using `Invoke-RestMethod`.
+
+#### Example to create data
+
+```powershell
+{% highlight powershell %}
+# GraphQL query to create a new user
+$query = @"
+mutation {
+  createUser(input: {
+    name: "John Doe"
+    email: "johndoe@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+"@
+
+# Body of the HTTP request
+$body = @{
+    query = $query
+} | ConvertTo-Json
+
+# Send the HTTP request to create a new user
+Invoke-RestMethod -Uri 'https://api.example.com/graphql' -Method POST -Body $body
+{% endhighlight %}
+```
+
+In this example, we define a GraphQL mutation query to create a new user with a name and email address. We then construct the body of the HTTP request as a JSON object containing the query. Finally, we send the HTTP request using `Invoke-RestMethod`.
