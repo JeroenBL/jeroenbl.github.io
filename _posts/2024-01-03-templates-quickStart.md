@@ -45,7 +45,7 @@ While __PowerShell 7__ is not a strict requirement, its advised to have it insta
 4. Select the connector type `HelloWorldExample`.
 5. Browse to the location where you want the files to be created and press `enter`
 
-![newHelloWorldExample](./assets/20240103-templates-QuickStart/newHelloWorldExample.gif)
+![newHelloWorldExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/master/_posts/assets/20240103-templates-quickStart/newHelloWorldExample.gif)
 
 If you open the _VSCode file Explorer_ you will see all the files that have been generated. 
 
@@ -71,7 +71,7 @@ __To execute and test a lifecycle action:__
 
 You should see the information message below in VSCode.
 
-![informationMessage](./assets/20240103-templates-QuickStart/informationMessage.png)
+![informationMessage](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/master/_posts/assets/20240103-templates-quickStart/informationMessage.png)
 
 ### Debug the `create` lifecycle action
 
@@ -92,7 +92,7 @@ To debug a lifecycle action:
 Press `F10` or click on the `Jump over` button, as seen in the example below, to step through your code.
 {: .notice--info}
 
-![debugging](./assets/20240103-templates-QuickStart/debugging.gif)
+![debugging](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/master/_posts/assets/20240103-templates-quickStart/debugging.gif)
 
 ### Project structure
 
