@@ -19,7 +19,7 @@ Before you begin developing a connector, make sure to have installed the followi
 - [ ] [PowerShell extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 - [ ] [ConnectorGenerator VSCode extension](https://github.com/JeroenBL/ConnectorGenerator)
 
-**Info Notice:**
+**TIP**
 While __PowerShell 7__ is not a strict requirement, its advised to have it installed locally if your connector will be executed using __HelloID__ cloud PowerShell.
 {: .notice--info}
 
@@ -43,7 +43,7 @@ While __PowerShell 7__ is not a strict requirement, its advised to have it insta
 2. Right click to open the context menu.
 3. Click on `ConnectorGenerator -> Create new HelloID connector project scaffolding`.
 4. Select the connector type `HelloWorldExample`.
-5. Browse to the location where you want the files to be created and press `enter`
+5. Browse to the location where you want the files to be created and press `enter`.
 
 ![newHelloWorldExample](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/master/_posts/assets/20240103-templates-quickStart/newHelloWorldExample.gif)
 
@@ -51,16 +51,17 @@ If you open the _VSCode file Explorer_ you will see all the files that have been
 
 ### Executing and testing the `create` lifecycle action
 
-You will probably spend a lot time developing your code. And, you want to make sure it runs properly __before__ moving to __HelloID__. Its advised to first execute and test our code locally.
+You will probably spend a lot time developing your code. And, you want to make sure it runs properly __before__ moving to __HelloID__. Its advised to first execute and test your code locally. 
+
 Every new project includes a _test_ folder that contains everything you need to execute (and test) your code locally. 
 
-Currently, the following files are inlcuded:
+Currently, the following files are included:
 
 | File Name       | Description                                                           |
 | --------------- | --------------------------------------------------------------------- |
 | config.json     | Configuration settings file                                           |
 | demoPerson.json | Sample JSON data for a person                                         |
-| debugStart.ps1  | initializes variables like the `$outputContext` and `$actionContext`. |
+| debugStart.ps1  | initializes variables like the `$outputContext` and `$actionContext`  |
 
 __To execute and test a lifecycle action:__
 
@@ -75,9 +76,9 @@ You should see the information message below in VSCode.
 
 ### Debug the `create` lifecycle action
 
-Debugging is _arguabbly_ one of the most complex aspects in your development process. To make debugging a little easier, we've inluded a `debugStart.ps1` that will initialize [all variables used within HelloID](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems/powershell-v2-target-system-variable-reference.html).
+Debugging is _arguably_ one of the most complex aspects in your development process. To make debugging a little easier, we've included a `debugStart.ps1` that will initialize [all variables used within HelloID](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems/powershell-v2-target-system-variable-reference.html).
 
-**Info Notice:**
+**TIP**
 Make sure the `debugStart.ps1` is loaded __before__ executing one of the lifecycle actions.
 {: .notice--info}
 
@@ -88,8 +89,8 @@ To debug a lifecycle action:
 3. Set a breakpoint on line `20`.
 4. Press `Run` to execute the code.
 
-**Info Notice:**
-Press `F10` or click on the `Jump over` button, as seen in the example below, to step through your code.
+**TIP**
+Press `F10` or click on the `Jump over` button, as seen in the animation below, to step through your code.
 {: .notice--info}
 
 ![debugging](https://raw.githubusercontent.com/JeroenBL/jeroenbl.github.io/master/_posts/assets/20240103-templates-quickStart/debugging.gif)
