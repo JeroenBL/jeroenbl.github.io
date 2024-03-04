@@ -5,3 +5,5 @@ Gemfile.lock
 _posts/.DS_Store
 assets/.DS_Store
 .DS_Store
+*.mov
+/_posts/upcomming
