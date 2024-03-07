@@ -55,11 +55,10 @@ You will probably spend a lot time developing your code. And, you want to make s
 
 Every new project includes a _test_ folder that contains everything you need to execute (and test) your code locally. 
 
-Currently, the following files are included:
+Our _HelloID-Conn-Prov-Target-HelloWorld_ example includes the following files:
 
 | File Name       | Description                                                           |
 | --------------- | --------------------------------------------------------------------- |
-| config.json     | Configuration settings file                                           |
 | demoPerson.json | Sample JSON data for a person                                         |
 | debugStart.ps1  | initializes variables like the `$outputContext` and `$actionContext`  |
 
