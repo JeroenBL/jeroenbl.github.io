@@ -3,7 +3,6 @@ title: "PowerShell (QuickBytes) classes"
 categories:
   - PowerShell
   - QuickBytes
-  - Classes
 tags:
   - powershell
 ---
@@ -35,6 +34,17 @@ class Dog {
 In this case, the answer would be **3** `InvalidOperation`. 
 
 But why?
+
+## Table of contents
+
+- [Table of contents](#table-of-contents)
+  - [Classes](#classes)
+  - [Instantiation](#instantiation)
+  - [Constructor](#constructor)
+  - [Properties](#properties)
+  - [But why do we get an `InvalidOperation` error?](#but-why-do-we-get-an-invalidoperation-error)
+  - [Methods](#methods)
+  - [Wrapping Up](#wrapping-up)
 
 ### Classes
 
