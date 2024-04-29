@@ -140,7 +140,7 @@ We have a huge collection of connectors available on the [Tools4ever GitHub](htt
 
 #### Documentation
 
-Make sure to explore our [documentation](https://docs.helloid.com/en).
+Make sure to explore our [documentation](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems.html).
 
 #### ChatGPT
 
